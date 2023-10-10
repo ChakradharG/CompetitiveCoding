@@ -17,15 +17,15 @@ class Codec:
         q = deque([root])
         while q:
             node = q.popleft()
-            if node is not None:
+            if node is None:
+                order.append(None)
+            else:
                 order.append(node.val)
                 q.append(node.left)
                 q.append(node.right)
-            else:
-                order.append(None)
         
-        while len(order) > 1 and order[-1] is None:
-            order.pop()
+        # while len(order) > 1 and order[-1] is None:
+        #     order.pop()
         print(order)
         
         return ','.join(map(str, order))
