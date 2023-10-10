@@ -43,14 +43,15 @@ class Codec:
         if root is not None:
             root = TreeNode(root)
             q = deque([root])
-            while q:
+
+            while q and order:
                 node = q.popleft()
-                if not order:
-                    break
+
                 left = order.popleft()
                 if left is not None:
                     node.left = TreeNode(left)
                     q.append(node.left)
+
                 if not order:
                     break
                 right = order.popleft()
