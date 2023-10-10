@@ -24,8 +24,8 @@ class Codec:
                 q.append(node.left)
                 q.append(node.right)
         
-        # while len(order) > 1 and order[-1] is None:
-        #     order.pop()
+        while len(order) > 1 and order[-1] is None:
+            order.pop()
         print(order)
         
         return ','.join(map(str, order))
