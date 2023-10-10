@@ -24,10 +24,6 @@ class Codec:
                 q.append(node.left)
                 q.append(node.right)
         
-        while len(order) > 1 and order[-1] is None:
-            order.pop()
-        print(order)
-        
         return ','.join(map(str, order))
 
     def deserialize(self, data):
@@ -42,28 +38,25 @@ class Codec:
                 order.append(None)
             else:
                 order.append(int(val))
-        print(order)
 
         root = order.popleft()
-        if root is None:
-            return None
-        else:
+        if root is not None:
             root = TreeNode(root)
-        q = deque([root])
-        while q:
-            node = q.popleft()
-            if not order:
-                break
-            left = order.popleft()
-            if left is not None:
-                node.left = TreeNode(left)
-                q.append(node.left)
-            if not order:
-                break
-            right = order.popleft()
-            if right is not None:
-                node.right = TreeNode(right)
-                q.append(node.right)
+            q = deque([root])
+            while q:
+                node = q.popleft()
+                if not order:
+                    break
+                left = order.popleft()
+                if left is not None:
+                    node.left = TreeNode(left)
+                    q.append(node.left)
+                if not order:
+                    break
+                right = order.popleft()
+                if right is not None:
+                    node.right = TreeNode(right)
+                    q.append(node.right)
         
         return root
 
