@@ -9,14 +9,13 @@ class Solution:
 
         m, n = len(s), len(t)
         dt = {}
-        for i in range(0, n):
+        for i in range(n):
             dt[t[i]] = 1 + dt.get(t[i], 0)
 
-        wLen = float('inf')
-        w = ""
-        l, r = 0, 1
+        w, wLen = '', float('inf')
         ds = {}
 
+        l, r = 0, 1
         while r <= m:
             ds[s[r-1]] = 1 + ds.get(s[r-1], 0)
             while eq(dt, ds):
