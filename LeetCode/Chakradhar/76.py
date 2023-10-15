@@ -1,28 +1,29 @@
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
+        def ord_(c):
+            return ord(c) - 65
+
         def eq(d1, d2):
-            for k, v in d1.items():
-                if d2.get(k, 0) < v:
+            for i in range(58):
+                if d2[i] < d1[i]:
                     return False
             return True
 
-
         m, n = len(s), len(t)
-        dt = {}
-        for i in range(n):
-            dt[t[i]] = 1 + dt.get(t[i], 0)
-
+        dt, ds = [0 for i in range(58)], [0 for i in range(58)]
         w, wLen = '', float('inf')
-        ds = {}
+
+        for i in range(n):
+            dt[ord_(t[i])] += 1
 
         l, r = 0, 1
         while r <= m:
-            ds[s[r-1]] = 1 + ds.get(s[r-1], 0)
+            ds[ord_(s[r-1])] += 1
             while eq(dt, ds):
                 if wLen > r - l:
                     w = s[l:r]
                     wLen = r - l
-                ds[s[l]] -= 1
+                ds[ord_(s[l])] -= 1
                 l += 1
             r += 1
 
