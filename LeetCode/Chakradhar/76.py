@@ -9,23 +9,20 @@ class Solution:
 
         m, n = len(s), len(t)
         dt, ds = {}, {}
-        w, wLen = '', float('inf')
+        wLen, left, right = float('inf'), 0, 0
 
         for i in range(n):
             dt[t[i]] = 1 + dt.get(t[i], 0)
-            ds[t[i]] = 0
 
         l, r = 0, 1
         while r <= m:
-            if s[r-1] in ds:
-                ds[s[r-1]] += 1
-                while eq(dt, ds):
-                    if wLen > r - l:
-                        w = s[l:r]
-                        wLen = r - l
-                    if s[l] in ds:
-                        ds[s[l]] -= 1
-                    l += 1
+            ds[s[r-1]] = 1 + ds.get(s[r-1], 0)
+            while eq(dt, ds):
+                if wLen > r - l:
+                    left, right = l, r
+                    wLen = r - l
+                ds[s[l]] -= 1
+                l += 1
             r += 1
 
-        return w
+        return s[left:right]
