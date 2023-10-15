@@ -16,6 +16,12 @@ class Solution:
         ds = {}
 
         l, r = 0, 1
+        if n > m:
+            return ""
+        # while r < n:
+        #     ds[s[r-1]] = 1 + ds.get(s[r-1], 0)
+        #     r += 1
+
         while r <= m:
             ds[s[r-1]] = 1 + ds.get(s[r-1], 0)
             while eq(dt, ds):
