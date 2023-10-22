@@ -23,6 +23,15 @@ class Solution:
             secDiag.remove(x + y)
             board[x][y] = '.'
 
+        def replace(row):
+            res = ''
+            for sq in row:
+                if sq < 0:
+                    res += 'Q'
+                else:
+                    res += '.'
+            return res
+
         def backtrack(row):
             if row == len(board):
                 boards.append([''.join(row) for row in board])
