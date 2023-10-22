@@ -36,10 +36,9 @@ class Solution:
             return res
 
         def backtrack(nRem, row):
-                # return
             if row == len(board):
-                if nRem == 0:
-                    boards.append(list(map(replace, board)))
+                # if nRem == 0:
+                boards.append(list(map(replace, board)))
                 return
             for j in range(n):
                 if addQ(row, j):
