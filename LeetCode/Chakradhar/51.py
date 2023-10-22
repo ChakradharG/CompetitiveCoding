@@ -1,49 +1,36 @@
 class Solution:
     def solveNQueens(self, n: int) -> List[List[str]]:
         boards = []
-        board = [[0 for i in range(n)] for j in range(n)]
+        board = [['.' for i in range(n)] for j in range(n)]
+        cols = set()
+        priDiag = set()
+        secDiag = set()
 
         def addQ(x, y):
-            if board[x][y] != 0:
+            if y in cols or \
+               (x - y) in priDiag or \
+               (x + y) in secDiag:
                 return False
-            for i in range(n):
-                for j in range(n):
-                    if i == x or \
-                       j == y or \
-                       (i - j) == (x - y) or \
-                       (i + j) == (x + y):
-                       board[i][j] += 1
-            board[x][y] = -1
+            cols.add(y)
+            priDiag.add(x - y)
+            secDiag.add(x + y)
+            board[x][y] = 'Q'
             return True
 
         def remQ(x, y):
-            for i in range(n):
-                for j in range(n):
-                    if i == x or \
-                       j == y or \
-                       (i - j) == (x - y) or \
-                       (i + j) == (x + y):
-                       board[i][j] -= 1
-            board[x][y] = 0
+            cols.remove(y)
+            priDiag.remove(x - y)
+            secDiag.remove(x + y)
+            board[x][y] = '.'
 
-        def replace(row):
-            res = ''
-            for sq in row:
-                if sq < 0:
-                    res += 'Q'
-                else:
-                    res += '.'
-            return res
-
-        def backtrack(nRem, row):
+        def backtrack(row):
             if row == len(board):
-                # if nRem == 0:
-                boards.append(list(map(replace, board)))
+                boards.append([''.join(row) for row in board])
                 return
             for j in range(n):
                 if addQ(row, j):
-                    backtrack(nRem-1, row+1)
+                    backtrack(row+1)
                     remQ(row, j)
 
-        backtrack(n, 0)
+        backtrack(0)
         return boards
