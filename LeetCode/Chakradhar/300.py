@@ -10,6 +10,8 @@ class Solution:
                 if nums[index] < nums[i]:
                     lis[index] = max(lis[index], 1 + lis[i])
                     maxLis = max(maxLis, lis[index])
+                    if nums[index] == nums[i] - 1:
+                        break
             index -= 1
 
         print(lis)
