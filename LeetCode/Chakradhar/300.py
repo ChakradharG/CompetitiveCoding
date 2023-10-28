@@ -12,7 +12,8 @@ class Solution:
                     start = mid + 1
             return start
 
-        n = 0
+        # Ref: https://www.youtube.com/watch?v=on2hvxBXJH4
+        n = 0   # not maintaining LIS array, replacing inplace
         for num in nums:
             idx = findIdx(num)
             if idx == n:
