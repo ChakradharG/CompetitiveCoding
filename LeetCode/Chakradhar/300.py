@@ -14,5 +14,4 @@ class Solution:
                         break
             index -= 1
 
-        print(lis)
         return maxLis
