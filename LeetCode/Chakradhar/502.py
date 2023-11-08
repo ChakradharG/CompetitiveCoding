@@ -10,13 +10,11 @@ class Solution:
             while mptr < len(merged) and merged[mptr][1] <= w:
                 heapq.heappush(heap, merged[mptr])
                 mptr += 1
-                # if merged[i][1] <= w:
-                # else:
-                #     i += 1
 
-            # print(heap)
             if heap:
                 w -= heapq.heappop(heap)[0]
+            else:
+                break
             k -= 1
 
         return w
