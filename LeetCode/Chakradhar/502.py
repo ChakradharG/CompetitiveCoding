@@ -1,18 +1,18 @@
 class Solution:
     def findMaximizedCapital(self, k: int, w: int, profits: List[int], capital: List[int]) -> int:
-        merged = sorted([
-            (-p, c) for (p, c) in zip(profits, capital)
-        ], key=lambda x: x[1])
+        capitalHeap = [(c, p) for (p, c) in zip(profits, capital)]
+        heapq.heapify(capitalHeap)
+        profitHeap = []
 
-        heap = []
-        mptr = 0
         while k > 0:
-            while mptr < len(merged) and merged[mptr][1] <= w:
-                heapq.heappush(heap, merged[mptr])
-                mptr += 1
+            while capitalHeap and capitalHeap[0][0] <= w:
+                heapq.heappush(
+                    profitHeap,
+                    -heapq.heappop(capitalHeap)[1]
+                )
 
-            if heap:
-                w -= heapq.heappop(heap)[0]
+            if profitHeap:
+                w -= heapq.heappop(profitHeap)
             else:
                 break
             k -= 1
