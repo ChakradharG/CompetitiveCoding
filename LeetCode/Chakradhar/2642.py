@@ -10,7 +10,6 @@ class Graph:
         self.adjList[edge[0]].append((edge[1], edge[2]))
 
     def shortestPath(self, node1: int, node2: int) -> int:
-        print('hi')
         visited, distance = set(), [math.inf for i in range(self.n)]
 
         distance[node1] = 0
@@ -23,9 +22,9 @@ class Graph:
             for i in range(len(distance)):
                 if (distance[i] < mn) and (i not in visited):
                     mn, u = distance[i], i
-            print(visited, u)
             if u == -1:
                 return -1
+
             visited.add(u)
             for (v, cost) in self.adjList[u]:
                 # if v in visited:
