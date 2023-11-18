@@ -24,7 +24,7 @@ class Graph:
                 newDist = dist + cost
                 if newDist < distance[v]:
                     distance[v] = newDist
-                heapq.heappush(priQ, (newDist, v))
+                    heapq.heappush(priQ, (newDist, v))
 
         return -1
 
