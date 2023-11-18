@@ -2,7 +2,7 @@ class Graph:
 
     def __init__(self, n: int, edges: List[List[int]]):
         self.n = n
-        self.adjList = {i: [] for i in range(n)}
+        self.adjList = [[] for _ in range(n)]
         for (src, dst, cost) in edges:
             self.adjList[src].append((dst, cost))
 
@@ -10,7 +10,7 @@ class Graph:
         self.adjList[edge[0]].append((edge[1], edge[2]))
 
     def shortestPath(self, node1: int, node2: int) -> int:
-        visited, distance = {}, [[0, node1]]
+        visited, distance = {}, [(0, node1)]
 
         while distance:
             dist, u = heapq.heappop(distance)
