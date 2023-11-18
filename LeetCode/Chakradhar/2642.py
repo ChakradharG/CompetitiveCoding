@@ -9,11 +9,13 @@ class Graph:
         self.adjList[edge[0]].append((edge[1], edge[2]))
 
     def shortestPath(self, node1: int, node2: int) -> int:
-        visited, distance = {}, [(0, node1)]
+        visited = [math.inf for _ in range(len(self.adjList))]
+        visited[node1] = 0
+        distance = [(0, node1)]
 
         while distance:
             dist, u = heapq.heappop(distance)
-            if u in visited:
+            if visited[u] != math.inf and visited[u] != 0:
                 continue
             if u == node2:
                 return dist
@@ -26,7 +28,7 @@ class Graph:
             # if node2 in visited:
             #     break
 
-        return visited.get(node2, -1)
+        return -1
 
 
 
