@@ -14,14 +14,18 @@ class Graph:
 
         while distance:
             dist, u = heapq.heappop(distance)
+            if u in visited:
+                continue
+            if u == node2:
+                return dist
 
             visited[u] = dist
             for (v, cost) in self.adjList[u]:
-                if v in visited:
-                    continue
+                # if v in visited:
+                #     continue
                 heapq.heappush(distance, (dist + cost, v))
-            if node2 in visited:
-                break
+            # if node2 in visited:
+            #     break
 
         return visited.get(node2, -1)
 
