@@ -18,5 +18,4 @@ class Solution:
                 slopes[(slope, intercept)].add((x2, y2))
                 maxPts = max(maxPts, len(slopes[(slope, intercept)]))
 
-        print(slopes)
         return maxPts
