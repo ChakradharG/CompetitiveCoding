@@ -17,6 +17,7 @@ class Solution:
                     pairs[(m, b)] = set()
                 pairs[(m, b)].add((x1, y1))
                 pairs[(m, b)].add((x2, y2))
+                print(m, b)
 
                 mx = max(mx, len(pairs[(m, b)]))
 
