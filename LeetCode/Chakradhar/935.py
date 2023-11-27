@@ -1,20 +1,18 @@
+import numpy as np
+
 class Solution:
     def knightDialer(self, n: int) -> int:
-        row0 = [0 for _ in range(4)]
-        row1 = [1 for _ in range(4)]
+        v = np.array([[1, 1, 1, 1]])    # 1 x 4
+        A = np.matrix([
+            [0, 0, 0, 1],
+            [0, 0, 2, 2],
+            [0, 1, 0, 0],
+            [2, 1, 0, 0]
+        ], dtype=object)  # np.MATRIX, not np.ndarray. A**2 => A @ A
 
-        for i in range(n-1):
-            row0[0] = 2 * row1[3]
-            row0[1] = row1[3] + row1[2]
-            row0[2] = 2 * row1[1]
-            row0[3] = row1[0] + row0[2]
-            row0, row1 = row1, row0
-
-        mod = 10**9 + 7
-        cnt = row1[0] + (2 * row1[1])
-        for i in range(1, 4):
-            cnt = (cnt + 2 * row1[i]) % mod
+        res = v @ (A ** (n-1))
+        cnt = (np.asarray(res) * np.array([[1, 4, 2, 2]])).sum()
 
         if n == 1:
-            cnt += 1    # for 5
-        return cnt
+            cnt += 1
+        return cnt % (10**9 + 7)
