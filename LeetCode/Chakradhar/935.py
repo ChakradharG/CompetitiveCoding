@@ -11,39 +11,20 @@ class Solution:
                 return [4, 2]
             elif num == 4:
                 return [0, 3, 1]
-            # elif num == 5:
-            #     return []
-            # elif num == 6:
-            #     return [0, 1, 7]
-            # elif num == 7:
-            #     return [2, 6]
-            # elif num == 8:
-            #     return [1, 3]
-            # elif num == 9:
-            #     return [2, 4]
 
-        def dfs(idx, num):
-            key = (idx, num)
-            if key in dp:
-                return dp[key]
+        row0 = [0 for _ in range(5)]
+        row1 = [1 for _ in range(5)]
 
-            if idx == n-1:
-                dp[key] = 1
-                return 1
+        for i in range(n-1):
+            for j in range(5):
+                row0[j] = 0
+                for k in neighbors(j):
+                    row0[j] += row1[k]
+            row0, row1 = row1, row0
 
-            dp[key] = 0
-            for neighbor in neighbors(num):
-                dp[key] += dfs(idx+1, neighbor)
-
-            return dp[key]
-
-        dp = {}
-        cnt, mod = 0, 10**9 + 7
+        cnt, mod = row1[0], 10**9 + 7
         for i in range(1, 5):
-            dfs(0, i)
-            cnt = (cnt + dp[(0, i)]) % mod
-        dfs(0, 0)
-        cnt = (2 * cnt + dp[(0, 0)]) % mod
+            cnt = (cnt + 2 * row1[i]) % mod
 
         if n == 1:
             cnt += 1    # for 5
