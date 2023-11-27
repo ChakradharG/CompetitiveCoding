@@ -9,6 +9,7 @@ class Solution:
             [0, 1, 0, 0],
             [2, 1, 0, 0]
         ], dtype=object)  # np.MATRIX, not np.ndarray. A**2 => A @ A
+        # dtype=object to avoid overflow
 
         res = v @ (A ** (n-1))
         cnt = (np.asarray(res) * np.array([[1, 4, 2, 2]])).sum()
