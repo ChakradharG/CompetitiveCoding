@@ -14,10 +14,11 @@ class Solution:
         row1 = [1 for _ in range(4)]
 
         for i in range(n-1):
-            for j in range(4):
-                row0[j] = 0
-                for k in neighbors(j):
-                    row0[j] += row1[k]
+            # for j in range(4):
+            row0[0] = 2 * row1[3]
+            row0[1] = row1[3] + row1[2]
+            row0[2] = 2 * row1[1]
+            row0[3] = row1[0] + 2 * row1[1]
             row0, row1 = row1, row0
 
         cnt, mod = row1[0] + (2 * row1[1]), 10**9 + 7
