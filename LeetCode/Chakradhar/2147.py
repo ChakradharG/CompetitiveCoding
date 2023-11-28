@@ -1,19 +1,21 @@
 class Solution:
     def numberOfWays(self, corridor: str) -> int:
-        numS = corridor.count('S')
-        if (numS == 0) or (numS % 2 != 0):
-            return 0
+        # numS = corridor.count('S')
 
-        cnt = 1
+        numS = 0
+        cnt, mod = 1, 10**9 + 7
         idx, prev, start = 0, -1, True
         while idx < len(corridor):
             if corridor[idx] != 'S':
                 idx += 1
                 continue
+            numS += 1
             if start and prev != -1:
-                cnt *= (idx - prev)
+                cnt = (cnt * (idx - prev)) % mod
             start = not start
             prev = idx
             idx += 1
 
-        return cnt % (10**9 + 7)
+        if (numS == 0) or (numS % 2 != 0):
+            return 0
+        return cnt
