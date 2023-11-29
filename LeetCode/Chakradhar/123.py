@@ -1,28 +1,14 @@
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        def dfs(idx, holding, rem):
-            if idx >= len(prices):
-                return 0
+        row0 = [0 for _ in range(4)]
+        row1 = [0 for _ in range(4)]
 
-            key = (idx, holding, rem)
-            if key in dp:
-                return dp[key]
+        for i in range(len(prices)-1, -1, -1):
+            row0[3] = max(prices[i] + row1[0], row1[3])
+            row0[2] = max(prices[i], row1[2])
+            row0[1] = max(row1[3] - prices[i], row1[1])
+            row0[0] = max(row1[2] - prices[i], row1[0])
 
-            if holding:
-                dp[key] = max(
-                    prices[idx] + dfs(idx+1, False, rem),
-                    dfs(idx+1, True, rem)
-                )
-            else:
-                if rem > 0:
-                    dp[key] = max(
-                        dfs(idx+1, True, rem-1) - prices[idx],
-                        dfs(idx+1, False, rem)
-                    )
-                else:
-                    dp[key] = 0
+            row0, row1 = row1, row0
 
-            return dp[key]
-
-        dp = {}
-        return dfs(0, False, 2)
+        return row1[1]
