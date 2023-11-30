@@ -8,7 +8,7 @@ class Solution:
             bits.append(n & 0b01)
             n >>= 1
 
-        cost = {}
+        # cost = {}
         def setBit(idx, val):
             if bits[idx] == val:
                 return 0
@@ -18,22 +18,22 @@ class Solution:
             if idx == 0:
                 return 1
 
-            key = (idx, tuple(bits))
-            if key in cost:
-                return cost[key]
+            # key = (idx, tuple(bits))
+            # if key in cost:
+            #     return cost[key]
 
             c = setBit(idx - 1, 1)
             if c != 0:
-                cost[key] = 1 + c + (2**(idx-1) - 1)
+                cnt = 1 + c + (2**(idx-1) - 1)
             else:
-                cost[key] = 1 + c
+                cnt = 1 + c
                 for i in range(idx-2, -1 ,-1):
                     c = setBit(i, 0)
                     if c != 0:
-                        cost[key] += c + (2**i - 1)
+                        cnt += c + (2**i - 1)
                         break
 
-            return cost[key]
+            return cnt
 
         if sum(bits) == 1:
             ans = 0
