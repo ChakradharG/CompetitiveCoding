@@ -3,44 +3,38 @@ class Solution:
         if n == 0:
             return 0
 
-        bits = []   #LSB -> MSB (order reversed)
-        while n:
-            bits.append(n & 0b01)
-            n >>= 1
+        nBits = math.floor(math.log2(n)) + 1
 
-        # cost = {}
-        def setBit(idx, val):
-            if bits[idx] == val:
+        def assignBit(idx, val):
+            nonlocal n
+            if ((n >> idx) & 0b1) == val:
                 return 0
 
-            bits[idx] = val
+            # setting/resetting bit
+            if val:
+                n |= (1 << idx)
+            else:
+                n &= ~(1 << idx)
 
             if idx == 0:
                 return 1
 
-            # key = (idx, tuple(bits))
-            # if key in cost:
-            #     return cost[key]
-
-            c = setBit(idx - 1, 1)
-            if c != 0:
-                cnt = 1 + c + (2**(idx-1) - 1)
+            cost = assignBit(idx - 1, 1)
+            if cost != 0:   # meaning it is now of the form x...11x...
+                cnt = 1 + cost + (2**(idx-1) - 1)
             else:
-                cnt = 1 + c
+                cnt = 1 + cost
                 for i in range(idx-2, -1 ,-1):
-                    c = setBit(i, 0)
-                    if c != 0:
-                        cnt += c + (2**i - 1)
+                    cost = assignBit(i, 0)
+                    if cost != 0: # meaning it is now of the form x...01x...
+                        cnt += cost + (2**i - 1)
                         break
 
             return cnt
 
-        if sum(bits) == 1:
-            ans = 0
-            x = len(bits)
+        if (math.log2(n) % 1) == 0:
+            ans = 2**nBits - 1
         else:
-            ans = setBit(len(bits)-1, 0)
-            x = len(bits) - 1
+            ans = assignBit(nBits-1, 0) + (2**(nBits-1) - 1)
 
-        ans += (2**x - 1)
         return ans
