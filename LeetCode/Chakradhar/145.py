@@ -18,7 +18,7 @@ class Solution:
             node = stack.pop()  # right
             if node:
                 stack.append(None)
-                continue
+                continue    # now the right node becomes the "center" and the process is repeated for the subtree. When the entire subtree is processed, we pop the above None so that this node's parent is then printed out (below)
             ans.append(stack.pop().val)  # center
             node = None
 
