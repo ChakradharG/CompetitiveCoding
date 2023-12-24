@@ -18,8 +18,7 @@ class Solution:
             trie.addWord(word)
 
         def dfs(i, j, node, curStr):
-            inbounds = (0 <= i < m and 0 <= j < n)
-            if not inbounds or \
+            if not (0 <= i < m and 0 <= j < n) or \
             (i, j) in visited or \
             board[i][j] not in node.desc:
                 return
