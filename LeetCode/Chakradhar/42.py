@@ -3,15 +3,15 @@ class Solution:
         n = len(height)
         water = [math.inf for _ in range(n)]
 
-        stack = []
+        lstack = []
         for i in range(n):
-            while stack and stack[-1] <= height[i]:
-                stack.pop()
-            if stack:
-                water[i] = stack[0] - height[i]
+            while lstack and lstack[-1] <= height[i]:
+                lstack.pop()
+            if lstack:
+                water[i] = lstack[0] - height[i]
             else:
                 water[i] = 0
-            stack.append(height[i])
+            lstack.append(height[i])
 
         stack = []
         for i in range(n-1, -1, -1):
