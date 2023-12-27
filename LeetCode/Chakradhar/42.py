@@ -3,24 +3,25 @@ class Solution:
         n = len(height)
         water = [math.inf for _ in range(n)]
 
-        lstack = []
+        lstack, rstack = [], []
         for i in range(n):
+            j = n - i - 1
+
             while lstack and lstack[-1] <= height[i]:
                 lstack.pop()
-            if lstack:
-                water[i] = lstack[0] - height[i]
-            else:
-                water[i] = 0
-            lstack.append(height[i])
+            while rstack and rstack[-1] <= height[j]:
+                rstack.pop()
 
-        stack = []
-        for i in range(n-1, -1, -1):
-            while stack and stack[-1] <= height[i]:
-                stack.pop()
-            if stack:
-                water[i] = min(water[i], stack[0] - height[i])
+            if lstack:
+                water[i] = min(water[i], lstack[0] - height[i])
             else:
                 water[i] = 0
-            stack.append(height[i])
+            if rstack:
+                water[j] = min(water[j], rstack[0] - height[j])
+            else:
+                water[j] = 0
+
+            lstack.append(height[i])
+            rstack.append(height[j])
 
         return sum(water)
