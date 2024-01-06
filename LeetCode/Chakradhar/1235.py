@@ -9,17 +9,11 @@ class Solution:
             for i in range(len(jobs))
         ]
 
-        def dfs(idx, lastEnd):
-            if idx == len(startTime):
-                return 0
+        row = [0 for _ in range(len(profit)+1)]
+        for i in range(len(profit)-1, -1, -1):
+            row[i] = max(
+                jobs[i][2] + row[next_non_overlap[i]],
+                row[i+1]
+            )
 
-            if idx not in memo:
-                memo[idx] = max(
-                    jobs[idx][2] + dfs(next_non_overlap[idx], jobs[idx][1]),
-                    dfs(idx+1, lastEnd)
-                )
-
-            return memo[idx]
-
-        memo = {}
-        return dfs(0, 0)
+        return row[0]
