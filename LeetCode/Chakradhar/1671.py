@@ -15,6 +15,7 @@ class Solution:
             else:
                 nd[i] = i - index
 
+        ans = math.inf
         LIS = []
         for i in range(n-1, -1, -1):
             index = bisect.bisect_left(LIS, nums[i])
@@ -26,5 +27,6 @@ class Solution:
                 nd[i] = math.inf
             else:
                 nd[i] += (n - i) - (index + 1)
+                ans = min(ans, nd[i])
 
-        return min(nd[1:-1])
+        return ans
