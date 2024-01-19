@@ -18,14 +18,13 @@ class Solution:
 
             numSet[p1] -= 1
             numSet[p2] -= 1
-            arr.append(p1 + twoK//2)
 
             if dfs(idx+1, twoK, rem-1):
+                arr.append(p1 + twoK//2)
                 return True
             else:
                 numSet[p1] += 1
                 numSet[p2] += 1
-                arr.pop()
                 return False
 
         for j in range(1, len(nums)):
