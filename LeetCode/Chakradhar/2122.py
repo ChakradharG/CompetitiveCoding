@@ -4,7 +4,7 @@ class Solution:
         numSet = Counter(nums)
         arr = []
 
-        # @cache
+        @cache
         def dfs(idx, twoK, rem):
             if rem == 0:
                 return True
