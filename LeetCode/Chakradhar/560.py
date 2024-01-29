@@ -1,8 +1,5 @@
 class Solution:
     def subarraySum(self, nums: List[int], k: int) -> int:
-        if len(nums) == 1:
-            return int(nums[0] == k)
-
         cnt = 0
         prefix = defaultdict(int)
         prefix[0] = 1
