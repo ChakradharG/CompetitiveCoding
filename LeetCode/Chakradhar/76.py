@@ -1,29 +1,27 @@
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
-        m, n = len(s), len(t)
-        dt, ds = {}, {}
-        wLen, left, right = float('inf'), 0, 0
+        tset = {}
+        for c in t:
+            tset[c] = 1 + tset.get(c, 0)
 
-        for i in range(n):
-            dt[t[i]] = 1 + dt.get(t[i], 0)
-            ds[t[i]] = 0
-        have, need = 0, len(dt.keys())
+        diff = len(tset.keys())
+        beg, end = 0, 0
+        curL = math.inf
 
-        l, r = 0, 1
-        while r <= m:
-            if s[r-1] in ds:
-                ds[s[r-1]] += 1
-                if ds[s[r-1]] == dt[s[r-1]]:
-                    have += 1
-                while have == need:
-                    if wLen > r - l:
-                        left, right = l, r
-                        wLen = r - l
-                    if s[l] in ds:
-                        ds[s[l]] -= 1
-                        if ds[s[l]] < dt[s[l]]:
-                            have -= 1
-                    l += 1
-            r += 1
+        sset, l = {}, 0
+        for r in range(len(s)):
+            c = s[r]
+            sset[c] = 1 + sset.get(c, 0)
+            if sset[c] == tset.get(c, 0):
+                diff -= 1
 
-        return s[left:right]
+            while diff == 0:
+                if curL > (r - l + 1):
+                    beg, end = l, r+1
+                    curL = r - l + 1
+                if sset[s[l]] == tset.get(s[l], 0):
+                    diff += 1
+                sset[s[l]] -= 1
+                l += 1
+
+        return s[beg:end]
