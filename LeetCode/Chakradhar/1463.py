@@ -4,14 +4,7 @@ class Solution:
         mat0 = [[0 for j in range(C+2)] for i in range(C+2)]
         mat1 = [[0 for j in range(C+2)] for i in range(C+2)]
 
-        for i in range(C):
-            for j in range(C):
-                if i == j:
-                    mat1[i+1][j+1] = grid[-1][i]
-                else:
-                    mat1[i+1][j+1] = grid[-1][i] + grid[-1][j]
-
-        for k in range(R-2, -1, -1):
+        for k in range(R-1, -1, -1):
             for i in range(C):
                 for j in range(i+1, C):
                     I, J = i+1, j+1
