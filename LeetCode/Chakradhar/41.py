@@ -14,6 +14,7 @@ class Solution:
                 elif nums[val-1] == 0:
                     nums[val-1] = -(n+2)
 
+        print(nums)
         for i in range(n):
             if nums[i] >= 0:
                 return i + 1
