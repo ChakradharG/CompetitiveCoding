@@ -16,15 +16,15 @@ class Solution:
             while f**2 <= a:
                 if a % f == 0:
                     fctrs.append(f)
-                    while a % f == 0:
+                    while a % f == 0:   # 4 -> 2*2, we only want 2 once
                         a //= f
                 f += 1
-            if a > 1:
+            if a > 1:   # the remaining number is prime
                 fctrs.append(a)
             return fctrs
 
         n = len(nums)   # number of components
-        parent, d = {}, {}
+        parent, fctr_to_rep = {}, {}
         for num in nums:
             if num == 1:    # gcd(x, 1) == 1
                 return n == 1   # edge case: nums = [1]
@@ -36,10 +36,10 @@ class Solution:
                 continue
 
             for f in prime_fctrs(num):
-                if f not in d:
-                    d[f] = num
+                if f not in fctr_to_rep:
+                    fctr_to_rep[f] = num
                 else:
-                    if union(d[f], num):
+                    if union(fctr_to_rep[f], num):
                         n -= 1
 
         return n == 1
