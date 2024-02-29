@@ -11,12 +11,16 @@ class Solution:
             return parent[a]
 
         def prime_fctrs(a):
-            fctrs = {a}
-            end = math.ceil(math.sqrt(a))
-            for fctr in range(2, end+1):
-                if a % fctr == 0:
-                    fctrs.add(fctr)
-                    fctrs.add(a // fctr)
+            fctrs = []
+            f = 2
+            while f**2 <= a:
+                if a % f == 0:
+                    fctrs.append(f)
+                    while a % f == 0:
+                        a //= f
+                f += 1
+            if a > 1:
+                fctrs.append(a)
             return fctrs
 
         n = len(nums)   # number of components
