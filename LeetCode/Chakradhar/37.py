@@ -38,6 +38,8 @@ class Solution:
                 else:
                     board[i][j] = '.'
 
+            return False
+
         empty = []
         for i in range(9):
             for j in range(9):
