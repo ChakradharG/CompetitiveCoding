@@ -9,7 +9,7 @@ class Solution:
             ways = 0
             for (ni, nj) in [(i-1, j), (i, j-1), (i, j+1), (i+1, j)]:
                 if 0 <= ni < m and 0 <= nj < n:
-                    bitpos = n*i + j
+                    bitpos = n*ni + nj
                     if not ((vis >> bitpos) & 0b1):
                         ways += dfs(
                             ni, nj, free-1, 
@@ -28,4 +28,4 @@ class Solution:
                 elif grid[i][j] == 0:
                     free += 1
 
-        return dfs(*start, free, 0)
+        return dfs(*start, free, (0b1 << (n*start[0] + start[1])))
