@@ -19,13 +19,13 @@ class Solution:
             return ways
 
         m, n = len(grid), len(grid[0])
-        start = (-1, -1)
+        si, sj = -1, -1
         free = 1    # counting start as free to simplify code in `dfs`
         for i in range(m):
             for j in range(n):
                 if grid[i][j] == 1:
-                    start = (i, j)
+                    si, sj = i, j
                 elif grid[i][j] == 0:
                     free += 1
 
-        return dfs(*start, free, (0b1 << (n*start[0] + start[1])))
+        return dfs(si, sj, free, (0b1 << (n*si + sj)))
