@@ -3,47 +3,40 @@ class Solution:
         """
         Do not return anything, modify board in-place instead.
         """
-        def isValid(i, j):
-            slc = set()
-            for j2 in range(9):
-                if board[i][j2] in slc:
-                    return False
-                if board[i][j2] != '.':
-                    slc.add(board[i][j2])
-            slc.clear()
-            for i2 in range(9):
-                if board[i2][j] in slc:
-                    return False
-                if board[i2][j] != '.':
-                    slc.add(board[i2][j])
-            slc.clear()
-            i3, j3 = 3 * (i//3), 3 * (j//3)
-            for i2 in range(i3, i3 + 3):
-                for j2 in range(j3, j3 + 3):
-                    if board[i2][j2] in slc:
-                        return False
-                    if board[i2][j2] != '.':
-                        slc.add(board[i2][j2])
-            return True
-
         def dfs(idx):
             if idx == len(empty):
                 return True
 
             i, j = empty[idx]
-            for x in range(1, 10):
-                board[i][j] = str(x)
-                if isValid(i, j) and dfs(idx+1):
-                    return True
-                else:
+            for x in '123456789':
+                if x in rows[i] and x in cols[j] and x in subs[3*(i//3) + (j//3)]:
+                    board[i][j] = x
+                    rows[i].remove(x)
+                    cols[j].remove(x)
+                    subs[3*(i//3) + (j//3)].remove(x)
+
+                    if dfs(idx+1):
+                        return True
+
                     board[i][j] = '.'
+                    rows[i].add(x)
+                    cols[j].add(x)
+                    subs[3*(i//3) + (j//3)].add(x)
 
             return False
+
+        rows = [set('123456789') for _ in range(9)]
+        cols = [set('123456789') for _ in range(9)]
+        subs = [set('123456789') for _ in range(9)]
 
         empty = []
         for i in range(9):
             for j in range(9):
                 if board[i][j] == '.':
                     empty.append((i, j))
+                else:
+                    rows[i].remove(board[i][j])
+                    cols[j].remove(board[i][j])
+                    subs[3*(i//3) + (j//3)].remove(board[i][j])
 
         dfs(0)
