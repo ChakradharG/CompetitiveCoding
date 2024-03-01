@@ -22,13 +22,12 @@ class Solution:
             return top + left + right + bottom
 
         start = (-1, -1)
-        obs = 0
+        free = 0
         for i in range(m):
             for j in range(n):
                 if grid[i][j] == 1:
                     start = (i, j)
-                elif grid[i][j] == -1:
-                    obs += 1
-        free = m*n - 2 - obs
+                elif grid[i][j] == 0:
+                    free += 1
 
         return dfs(*start)
