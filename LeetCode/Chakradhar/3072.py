@@ -1,15 +1,7 @@
 from sortedcontainers import SortedList as s
-# from bisect import bisect as b
 
 class Solution:
     def resultArray(self, nums: List[int]) -> List[int]:
-        # def greaterCount(l, v):
-        #     cnt = 0
-        #     for x in l:
-        #         if x > v:
-        #             cnt += 1
-        #     return cnt
-
         sarr1, sarr2 = s([nums[0]]), s([nums[1]])
         arr1, arr2 = [nums[0]], [nums[1]]
         l1, l2 = 1, 1
