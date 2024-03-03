@@ -14,8 +14,6 @@ class FreqStack:
         heapq.heappush(self.h, (-self.c[val][0], -self.c[val][1], val))
 
     def pop(self) -> int:
-        # while self.h[0][0] != -self.c[self.h[0][2]][0]:
-        #     heapq.heappop(self.h)
         *_, val = heapq.heappop(self.h)
         self.c[val][0] -= 1
         return val
