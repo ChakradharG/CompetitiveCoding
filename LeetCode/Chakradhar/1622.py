@@ -5,22 +5,20 @@ class Fancy:
         self.l = []
 
     def append(self, val: int) -> None:
-        self.l.append([val, self.m, self.a])
+        # `pow` is computing modular inverse
+        self.l.append((val - self.a) * pow(self.m, -1, MOD))
 
     def addAll(self, inc: int) -> None:
-        self.a += inc
+        self.a = (self.a + inc) % MOD
 
     def multAll(self, m: int) -> None:
-        self.m *= m
-        self.a *= m
+        self.m = (self.m * m) % MOD
+        self.a = (self.a * m) % MOD
 
     def getIndex(self, idx: int) -> int:
         if idx >= len(self.l):
             return -1
-        x, alpha, beta = self.l[idx]
-        alpha = self.m // alpha
-        beta = self.a - (alpha*beta)
-        return (alpha*x + beta) % MOD
+        return ((self.m * self.l[idx]) + self.a) % MOD
 
 MOD = 10**9 + 7
 # Your Fancy object will be instantiated and called as such:
