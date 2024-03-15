@@ -7,15 +7,11 @@ class Solution:
             key = (i, k)
             if key not in memo:
                 memo[key] = False
-                jump = k - 1
-                if jump > 0 and (stones[i] + jump) in rev_map:
-                    memo[key] |= dfs(rev_map[stones[i] + jump], jump)
-                jump = k
-                if jump > 0 and (stones[i] + jump) in rev_map:
-                    memo[key] |= dfs(rev_map[stones[i] + jump], jump)
-                jump = k + 1
-                if jump > 0 and (stones[i] + jump) in rev_map:
-                    memo[key] |= dfs(rev_map[stones[i] + jump], jump)
+                for jump in [(k - 1), k, (k + 1)]:
+                    if jump > 0 and (stones[i] + jump) in rev_map:
+                        if dfs(rev_map[stones[i] + jump], jump):
+                            memo[key] = True
+                            break
             return memo[key]
 
         memo = {}
