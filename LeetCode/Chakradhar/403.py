@@ -8,9 +8,14 @@ class Solution:
             if key not in memo:
                 memo[key] = False
                 jump = k - 1
-                for jump in [(k - 1), k, (k + 1)]:
-                    if jump > 0 and (stones[i] + jump) in rev_map:
-                        memo[key] |= dfs(rev_map[stones[i] + jump], jump)
+                if jump > 0 and (stones[i] + jump) in rev_map:
+                    memo[key] |= dfs(rev_map[stones[i] + jump], jump)
+                jump = k
+                if jump > 0 and (stones[i] + jump) in rev_map:
+                    memo[key] |= dfs(rev_map[stones[i] + jump], jump)
+                jump = k + 1
+                if jump > 0 and (stones[i] + jump) in rev_map:
+                    memo[key] |= dfs(rev_map[stones[i] + jump], jump)
             return memo[key]
 
         memo = {}
