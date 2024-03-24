@@ -1,21 +1,24 @@
 class TrieNode:
     def __init__(self):
         self.d = {}
-        self.ids = [(math.inf, 0)]
+        self.ids = (math.inf, 0)
     def add(self, word, l, idx):
         node = self
         for c in word:
             if c not in node.d:
                 node.d[c] = TrieNode()
             node = node.d[c]
-            heapq.heappush(node.ids, (l, idx))
+            if l < node.ids[0]:
+                node.ids = (l, idx)
+            elif l == node.ids[0] and idx < node.ids[1]:
+                node.ids = (l, idx)
     def search(self, word):
         node = self
         for c in word:
             if c not in node.d:
-                return node.ids
+                return node.ids[1]
             node = node.d[c]
-        return node.ids
+        return node.ids[1]
 
 class Solution:
     def stringIndices(self, wordsContainer: List[str], wordsQuery: List[str]) -> List[int]:
@@ -26,11 +29,10 @@ class Solution:
             trie.add(word[::-1], l, i)
             if l < sml[0]:
                 sml = (l, i)
-
-        trie.ids = [sml]
+        trie.ids = sml
 
         answer = []
         for word in wordsQuery:
-            answer.append(trie.search(word[::-1])[0][1])
+            answer.append(trie.search(word[::-1]))
 
         return answer
