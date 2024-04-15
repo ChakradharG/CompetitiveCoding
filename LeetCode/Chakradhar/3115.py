@@ -1,26 +1,25 @@
 def get_primes(n):
-    # Returns array of all primes <= n
+    # Returns array of size n+1 where index i tells whether i is prime or not
     sieve = [True for _ in range(n+1)]  # 0 to n
+    sieve[0] = sieve[1] = False
+    for x in range(4, n+1, 2):
+        sieve[x] = False
     for x in range(3, math.ceil(math.sqrt(n))+1, 2):
         if sieve[x]:
             for y in range(x*x, n+1, x*2):
                 sieve[y] = False
 
-    primes = [2]
-    for x in range(3, n+1, 2):
-        if sieve[x]:
-            primes.append(x)
-    return primes
+    return sieve
 
 class Solution:
     def maximumPrimeDifference(self, nums: List[int]) -> int:
         l, r = 0, len(nums) - 1
-        primes = set(get_primes(100))   # max val in nums is 100
+        primes = get_primes(100)   # max val in nums is 100
         while l <= r:
-            if nums[l] not in primes:
+            if not primes[nums[l]]:
                 l += 1
                 continue
-            if nums[r] not in primes:
+            if not primes[nums[r]]:
                 r -= 1
                 continue
             return r - l
