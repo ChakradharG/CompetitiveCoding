@@ -1,13 +1,10 @@
 def get_primes(n):
     # Returns array of all primes <= n
-    # x = 3
     sieve = [True for _ in range(n+1)]  # 0 to n
-    # while x**2 <= n:
-    for x in range(3, math.ceil(math.sqrt(n)) + 1, 2):
+    for x in range(3, math.ceil(math.sqrt(n))+1, 2):
         if sieve[x]:
             for y in range(x*x, n+1, x*2):
                 sieve[y] = False
-        # x += 2
 
     primes = [2]
     for x in range(3, n+1, 2):
