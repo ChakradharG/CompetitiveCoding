@@ -9,7 +9,6 @@ class Solution:
                 p, c = p + 1, c + 1
             else:
                 if p == 0:
-                    LPS[c] = 0
                     c += 1
                 else:
                     p = LPS[p - 1]
