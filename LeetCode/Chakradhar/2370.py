@@ -2,21 +2,13 @@ class Solution:
     def longestIdealString(self, s: str, k: int) -> int:
         n = len(s)
 
-        row = [0 for _ in range(26)]
+        LIS = [0 for _ in range(26)]    # similar cncept to LIS, max string len ending at index i
 
-        for i in range(n-1, -1, -1):
+        for i in range(n):
             pivot = ord(s[i]) - 97
             l = max(0, pivot - k)
             r = min(25, pivot + k)
 
-            indices = set(range(l, r + 1))
-            indices.remove(pivot)
+            LIS[pivot] = 1 + max(LIS[l:r+1])
 
-            for j in indices:   # loop over ideal indices only
-                row[j] = max(
-                    row[j],         # skip
-                    row[pivot] + 1  # include
-                )
-            row[pivot] += 1
-
-        return max(row)
+        return max(LIS)
