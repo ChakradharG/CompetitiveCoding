@@ -19,4 +19,5 @@ class Solution:
             # can divide into pairs and XOR all
             return total
         else:
+            # if odd, minD tells whether XORing one of the suboptimal nodes is better or not XORing one of the optimal nodes
             return total - minD
