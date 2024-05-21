@@ -44,10 +44,13 @@ class Solution:
         for k in range(m):
             if len(lamps) == 0:
                 break
+
             (i, j) = queries[k]
             ans[k] = isIlluminated(i, j)
-            for (ni, nj) in neighbors(i, j):
-                turnOff(ni, nj)
-                lamps.remove((ni, nj))
+
+            if ans[k]: # only turn off if illuminated
+                for (ni, nj) in neighbors(i, j):
+                    turnOff(ni, nj)
+                    lamps.remove((ni, nj))
 
         return ans
