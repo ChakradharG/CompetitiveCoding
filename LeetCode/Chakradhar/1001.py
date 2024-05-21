@@ -39,9 +39,13 @@ class Solution:
         for (i, j) in lamps:
             turnOn(i, j)
 
-        ans = []
-        for (i, j) in queries:
-            ans.append(isIlluminated(i, j))
+        m = len(queries)
+        ans = [0 for _ in range(m)]
+        for k in range(m):
+            if len(lamps) == 0:
+                break
+            (i, j) = queries[k]
+            ans[k] = isIlluminated(i, j)
             for (ni, nj) in neighbors(i, j):
                 turnOff(ni, nj)
                 lamps.remove((ni, nj))
