@@ -6,7 +6,7 @@ class Solution:
                 for dj in [-1, 0, 1]:
                     ni = i + di
                     nj = j + dj
-                    if (0 <= ni < n) and (0 <= nj < n):
+                    if (0 <= ni < n) and (0 <= nj < n) and ((ni, nj) in lamps):
                         nei.append((ni, nj))
             return nei
 
@@ -43,8 +43,7 @@ class Solution:
         for (i, j) in queries:
             ans.append(isIlluminated(i, j))
             for (ni, nj) in neighbors(i, j):
-                if (ni, nj) in lamps:
-                    turnOff(ni, nj)
-                    lamps.remove((ni, nj))
+                turnOff(ni, nj)
+                lamps.remove((ni, nj))
 
         return ans
