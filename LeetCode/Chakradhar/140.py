@@ -16,6 +16,6 @@ class Solution:
             return memo[key]
 
         wordDict = set(wordDict)
-        memo = {}   # (index, current unbroken string) -> [possible strings]
+        memo = {}   # (index, current unbroken string) -> []
 
         return dfs(0, '')
