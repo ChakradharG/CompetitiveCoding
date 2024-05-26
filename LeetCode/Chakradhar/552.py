@@ -1,19 +1,24 @@
 class Solution:
     def checkRecord(self, n: int) -> int:
         MOD = 10**9 + 7
-        grid = [[0 for j in range(5)] for i in range(n+1)]
+        grid0 = [[0 for j in range(4)] for i in range(3)]
+        grid1 = [
+            [0, 0, 0, 0],
+            [1, 1, 1, 0],
+            [1, 1, 1, 0]
+        ]
 
-        # computing for a = 1
-        grid[-1] = [1, 1, 1, 0, 0] # base case
-        for i in range(n-1, -1, -1):
+        for _ in range(n):
+            # a = 0
             for j in range(3):
-                grid[i][j] = (grid[i+1][0] + grid[i+1][j+1]) % MOD
-            grid[i][4] = grid[i][0] # saving the state for a = 0
-
-        # computing a = 0
-        grid[-1][0] = 2 # base case
-        for i in range(n-1, -1, -1):
+                grid0[2][j] = (
+                    grid1[2][0] + grid1[2][j+1] + 
+                    grid1[1][0]) % MOD
+            # a = 1
             for j in range(3):
-                grid[i][j] = (grid[i+1][0] + grid[i+1][j+1] + grid[i+1][4]) % MOD
+                grid0[1][j] = (
+                    grid1[1][0] + grid1[1][j+1] + 
+                    grid1[0][0]) % MOD
+            grid0, grid1 = grid1, grid0
 
-        return grid[0][0]
+        return grid1[2][0]
