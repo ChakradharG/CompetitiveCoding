@@ -24,6 +24,7 @@ class Solution:
                 if cnt == (2 * ones + 1):
                     p1 = i
 
+        print(p1, p2, p3, p4)
         v3 = 0  # rightmost value, this is fixed (can only have leading 0s)
         for i in range(p4, len(arr)):
             v3 = (v3 << 1) + arr[i]
