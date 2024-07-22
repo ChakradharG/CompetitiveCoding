@@ -4,6 +4,11 @@ class Solution:
         LCS = [[0 for j in range(n+1)] for i in range(m+1)]
         par = [[None for j in range(n+1)] for i in range(m+1)]
 
+        for i in range(1, m+1):
+            par[i][0] = (i-1, 0)
+        for j in range(1, n+1):
+            par[0][j] = (0, j-1)
+
         for i in range(m):
             for j in range(n):
                 if str1[i] == str2[j]:
@@ -19,7 +24,7 @@ class Solution:
 
         string = []
         i, j = m, n
-        while (i != 0) and (j != 0):
+        while (i != 0) or (j != 0):
             x, y = par[i][j]
             if x < i:
                 string.append(str1[i-1])
@@ -27,10 +32,4 @@ class Solution:
                 string.append(str2[j-1])
             i, j = x, y
 
-        string = ''.join(reversed(string))
-        if i != 0:
-            string = str1[:i] + string
-        elif j != 0:
-            string = str2[:j] + string
-
-        return string
+        return ''.join(reversed(string))
