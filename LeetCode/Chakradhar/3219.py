@@ -1,19 +1,27 @@
 class Solution:
     def minimumCost(self, m: int, n: int, horizontalCut: List[int], verticalCut: List[int]) -> int:
-        cuts = sorted(
-            [(c, 'h') for c in horizontalCut] +
-            [(c, 'v') for c in verticalCut],
-            reverse=True
-        )
-
+        m, n = m - 1, n - 1
+        horizontalCut.sort(reverse=True)
+        verticalCut.sort(reverse=True)
         h, v = 1, 1
+        i, j = 0, 0
+
         ans = 0
-        for (c, d) in cuts:
-            if d == 'h':
-                ans += (c * h)
+        while i < m and j < n:
+            if horizontalCut[i] >= verticalCut[j]:
+                ans += (horizontalCut[i] * h)
                 v += 1
+                i += 1
             else:
-                ans += (c * v)
+                ans += (verticalCut[j] * v)
                 h += 1
+                j += 1
+
+        while i < m:
+            ans += (horizontalCut[i] * h)
+            i += 1
+        while j < n:
+            ans += (verticalCut[j] * v)
+            j += 1
 
         return ans
