@@ -1,19 +1,19 @@
 class Solution:
-    def restoreMatrix(self, rowSum, colSum):
-        N = len(rowSum)
-        M = len(colSum)
+    def restoreMatrix(self, rowSum: List[int], colSum: List[int]) -> List[List[int]]:
+        m, n = len(rowSum), len(colSum)
+        ans = [[0 for j in range(n)] for i in range(m)]
 
-        curr_row_sum = [0] * N
-        curr_col_sum = [0] * M
+        i, j = 0, 0
+        while (i < m) and (j < n):
+            if rowSum[i] <= colSum[j]:
+                ans[i][j] = rowSum[i]
+                colSum[j] -= rowSum[i]
+                rowSum[i] = 0
+                i += 1
+            else:
+                ans[i][j] = colSum[j]
+                rowSum[i] -= colSum[j]
+                colSum[j] = 0
+                j += 1
 
-        orig_matrix = [[0] * M for _ in range(N)]
-        for i in range(N):
-            for j in range(M):
-                orig_matrix[i][j] = min(
-                    rowSum[i] - curr_row_sum[i], colSum[j] - curr_col_sum[j]
-                )
-
-                curr_row_sum[i] += orig_matrix[i][j]
-                curr_col_sum[j] += orig_matrix[i][j]
-
-        return orig_matrix
+        return ans
