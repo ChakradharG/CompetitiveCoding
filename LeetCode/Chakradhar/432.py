@@ -42,7 +42,7 @@ class AllOne:
             del self.d[key]
             del node
         else:
-            while (node.p is not self.t) and (node.cnt < node.p.cnt):
+            if (node.p is not self.t) and (node.cnt < node.p.cnt):
                 p0, p1, p2, p3 = node.p.p, node.p, node, node.n
                 p0.n = p2
                 p1.p, p1.n = p2, p3
