@@ -1,59 +1,49 @@
-class ListNode:
-    def __init__(self, val='', cnt=0, p=None, n=None):
-        self.cnt, self.val = cnt, val
-        self.p, self.n = p, n
-    def __str__(self):
-        node = self
-        s = ''
-        while node:
-            s += f'({node.val}: {node.cnt})'
-            node = node.n
-        return s
-
 class AllOne:
 
     def __init__(self):
+        self.n = 0
         self.d = {}
-        self.h, self.t = ListNode(), ListNode()
-        self.h.p = self.t
-        self.t.n = self.h
+        self.c = defaultdict(set)
+        self.c[0].add('')
+        self.mn, self.mx = math.inf, 0
 
     def inc(self, key: str) -> None:
         if key not in self.d:
-            self.d[key] = ListNode(val=key, cnt=0, p=self.t, n=self.t.n)
-            self.t.n.p = self.d[key]
-            self.t.n = self.d[key]
-        node = self.d[key]
-        node.cnt += 1
-        while (node.n is not self.h) and (node.cnt > node.n.cnt):
-            p0, p1, p2, p3 = node.p, node, node.n, node.n.n
-            p0.n = p2
-            p1.p, p1.n = p2, p3
-            p2.p, p2.n = p0, p1
-            p3.p = p1
+            self.c[1].add(key)
+            self.d[key] = 1
+            self.n += 1
+        else:
+            v = self.d[key]
+            self.c[v].remove(key)
+            self.c[v+1].add(key)
+            self.d[key] += 1
+        self.mx = max(self.mx, self.d[key])
+        self.mn = min(self.mn, self.d[key])
 
     def dec(self, key: str) -> None:
-        node = self.d[key]
-        node.cnt -= 1
-        if node.cnt == 0:
-            p0, p2 = node.p, node.n
-            p0.n = p2
-            p2.p = p0
+        v = self.d[key]
+        self.d[key] -= 1
+        self.c[v].remove(key)
+        if v == 1:
             del self.d[key]
-            del node
+            self.n -= 1
         else:
-            if (node.p is not self.t) and (node.cnt < node.p.cnt):
-                p0, p1, p2, p3 = node.p.p, node.p, node, node.n
-                p0.n = p2
-                p1.p, p1.n = p2, p3
-                p2.p, p2.n = p0, p1
-                p3.p = p1
+            self.c[v-1].add(key)
+            self.mn = min(self.mn, self.d[key])
 
     def getMaxKey(self) -> str:
-        return self.h.p.val
+        if self.n == 0:
+            return ''
+        while len(self.c[self.mx]) == 0:
+            self.mx -= 1
+        return next(iter(self.c[self.mx]))
 
     def getMinKey(self) -> str:
-        return self.t.n.val
+        if self.n == 0:
+            return ''
+        while len(self.c[self.mn]) == 0:
+            self.mn += 1
+        return next(iter(self.c[self.mn]))
 
 
 # Your AllOne object will be instantiated and called as such:
