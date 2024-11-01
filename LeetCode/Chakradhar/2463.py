@@ -1,24 +1,19 @@
 class Solution:
     def minimumTotalDistance(self, robot: List[int], factory: List[List[int]]) -> int:
         robot.sort()
-        factory = list(sorted(filter(lambda f: f[1] != 0, factory))) + [[math.inf, 1]]
-        m, n = len(robot), len(factory)-1
+        factory.sort()
+        factories = []
+        for (p, l) in factory:
+            factories.extend([p]*l)
+        m, n = len(robot), len(factories)
 
-        def dfs(i, j, l):
-            if i == m:
-                return 0
-            if j == n:
-                return math.inf
-            key = (i, j, l)
-            if key not in memo:
-                memo[key] = dfs(i, j+1, factory[j+1][1])
-                if l != 0:
-                    memo[key] = min(
-                        memo[key],
-                        abs(robot[i] - factory[j][0]) + dfs(i+1, j, l-1)
-                    )
-            return memo[key]
+        row0 = [0 for _ in range(n+1)]
+        row1 = [0 for _ in range(n+1)]
 
-        memo = {}
-        dfs(0, 0, factory[0][1])
-        return dfs(0, 0, factory[0][1])
+        for i in reversed(range(m)):
+            row0[-1] = math.inf
+            for j in reversed(range(n)):
+                row0[j] = min(row0[j+1], abs(robot[i] - factories[j]) + row1[j+1])
+            row0, row1 = row1, row0
+
+        return row1[0]
