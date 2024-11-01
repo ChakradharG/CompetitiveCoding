@@ -6,6 +6,7 @@ class Solution:
         for (p, l) in factory:
             factories.extend([p]*l)
         m, n = len(robot), len(factories)
+        print(robot, factories)
 
         row0 = [0 for _ in range(n+1)]
         row1 = [0 for _ in range(n+1)]
