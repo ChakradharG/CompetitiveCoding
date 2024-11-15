@@ -17,28 +17,23 @@ class Solution:
                 diff[i] = h[0][0]
             heappush(h, (i, nums[i]))
 
-        def dfs(i, k):
-            if i == (n - 1):
-                return 1, 0 # including this, skipping this
-            elif i == n:
-                return 0, 0
+        row0 = [(0, 0) for _ in range(n+1)]
+        row0[-2] = (1, 0)
+        row1 = [(0, 0) for _ in range(n+1)]
+        row1[-2] = (1, 0)
+        for i in reversed(range(n-1)):
+            inc, exc = row1[same[i]]
+            inc += 1
+            exc = max(exc, *row1[diff[i]])
+            row1[i] = (inc, exc)
 
-            key = (i, k)
-            if key not in memo:
-                x, y = dfs(same[i], k)
-                inc = 1 + x  # include this and go to next index that is same as this
-                exc = y
-                x, y = dfs(diff[i], k)
-                exc = max(exc, x, y) # skip this
-                if k > 0:
-                    x, y = dfs(diff[i], k-1)
-                    inc = max(
-                        inc,
-                        1 + x,  # include this
-                        1 + y   # include this
-                    )
-                memo[key] = [inc, exc]
-            return memo[key]
+        for _ in range(k):
+            for i in reversed(range(n-1)):
+                inc, exc = row0[same[i]]
+                inc += 1
+                exc = max(exc, *row0[diff[i]])
+                inc = max(inc, 1 + max(row1[diff[i]]))
+                row0[i] = (inc, exc)
+            row0, row1 = row1, row0
 
-        memo = {}
-        return max(dfs(0, k))
+        return max(row1[0])
