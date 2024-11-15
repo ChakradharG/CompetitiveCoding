@@ -8,12 +8,14 @@ class Solution:
             same[i] = d.get(nums[i], n)
             d[nums[i]] = i
 
+        h = []
         diff = [n for _ in range(n)]
-        for i in range(n):
-            for j in range(i+1, n):
-                if nums[i] != nums[j]:
-                    diff[i] = j
-                    break
+        for i in reversed(range(n)):
+            while h and h[0][1] == nums[i]:
+                heappop(h)
+            if h:
+                diff[i] = h[0][0]
+            heappush(h, (i, nums[i]))
 
         def dfs(i, k):
             if i == (n - 1):
