@@ -1,26 +1,16 @@
 class Solution:
     def maxMatrixSum(self, matrix: List[List[int]]) -> int:
-        n, p = [], []
+        ans, c, mn = 0, 0, abs(matrix[0][0])
         for row in matrix:
             for num in row:
+                mn = min(mn, abs(num))
                 if num < 0:
-                    n.append(num)
+                    c += 1
+                    ans -= num
                 else:
-                    p.append(num)
+                    ans += num
 
-        ans = sum(p)
-        if len(n) % 2 == 0:
-            ans -= sum(n)
+        if c % 2 == 0:
+            return ans
         else:
-            x = min(p, default=math.inf)
-            y = max(n)
-            if abs(y) > x:
-                ans -= sum(n)
-                ans -= x
-                ans -= x
-            else:
-                ans -= sum(n)
-                ans += y
-                ans += y
-
-        return ans
+            return ans - (2 * mn)
