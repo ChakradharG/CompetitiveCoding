@@ -7,13 +7,13 @@ class Solution:
 
         while h:
             w, i, j = heappop(h)
-            if (i == m-1) and (j == n-1):
-                break
             for ni, nj in [(i-1, j), (i+1, j), (i, j-1), (i, j+1)]:
                 if (0 <= ni < m) and (0 <= nj < n):
                     nw = w + grid[ni][nj]
                     if nw < d[ni][nj]:
                         d[ni][nj] = nw
                         heappush(h, (nw, ni, nj))
+                    if (ni == m-1) and (nj == n-1):
+                        return d[m-1][n-1]
 
         return d[m-1][n-1]
