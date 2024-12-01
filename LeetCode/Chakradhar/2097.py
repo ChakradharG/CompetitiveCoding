@@ -1,45 +1,41 @@
+class Node:
+    def __init__(self, val):
+        self.val = val
+        self.nei = deque([])
+        self.idg = 0
+
 class Solution:
-    def validArrangement(self, pairs):
-        from collections import defaultdict, deque
+    def validArrangement(self, pairs: List[List[int]]) -> List[List[int]]:
+        # REF: https://www.youtube.com/watch?v=8MpoO2zA2l4
+        adj = {}
+        for u, v in pairs:
+            if u not in adj:
+                adj[u] = Node(u)
+            if v not in adj:
+                adj[v] = Node(v)
+            adj[u].nei.append(adj[v])
+            adj[v].idg += 1
 
-        adjacencyMatrix = defaultdict(deque)
-        inDegree, outDegree = defaultdict(int), defaultdict(int)
-
-        # Build the adjacency list and track in-degrees and out-degrees
-        for pair in pairs:
-            start, end = pair
-            adjacencyMatrix[start].append(end)
-            outDegree[start] += 1
-            inDegree[end] += 1
-
-        result = []
-
-        def visit(node):
-            while adjacencyMatrix[node]:
-                nextNode = adjacencyMatrix[node].popleft()
-                visit(nextNode)
-            result.append(node)
-
-        # Find the start node (outDegree == 1 + inDegree )
-        startNode = -1
-        for node in outDegree:
-            if outDegree[node] == inDegree[node] + 1:
-                startNode = node
+        src = None
+        for node in adj.values():
+            if (len(node.nei) - node.idg) == 1:
+                src = node
                 break
+        if src is None:
+            src = list(adj.values())[0]
 
-        # If no such node exists, start from the first pair's first element
-        if startNode == -1:
-            startNode = pairs[0][0]
+        stack = [src]
+        path = []
+        while stack:
+            if len(stack[-1].nei) == 0:
+                node = stack.pop()
+                path.append(node.val)
+            else:
+                nei = stack[-1].nei.popleft()
+                stack.append(nei)
+        # path.reverse()
+        ans = []
+        for i in reversed(range(len(path) - 1)):
+            ans.append([path[i+1], path[i]])
 
-        # Start DFS traversal
-        visit(startNode)
-
-        # Reverse the result since DFS gives us the path in reverse
-        result.reverse()
-
-        # Construct the result pairs
-        pairedResult = [
-            [result[i - 1], result[i]] for i in range(1, len(result))
-        ]
-
-        return pairedResult
+        return ans
