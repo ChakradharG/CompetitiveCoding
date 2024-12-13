@@ -1,19 +1,14 @@
 class Solution:
     def findScore(self, nums: List[int]) -> int:
         n = len(nums)
-        heap = []
-        for i in range(n):
-            heap.append((nums[i], i))
-            nums[i] = False # will be used for marking
-        heapify(heap)
-
+        nums.append(math.inf)   # simplify checking boundary condition
         score = 0
-        while heap:
-            num, i = heappop(heap)
-            if not nums[i]:
-                score += num
-                nums[i] = True
-                nums[max(0, i-1)] = True
-                nums[min(n-1, i+1)] = True
+        l, r = 0, 0
+        while r < n:
+            if nums[r] <= nums[r+1]:
+                for i in range(r, l-1, -2):
+                    score += nums[i]
+                l, r = r+2, r+1
+            r += 1
 
         return score
