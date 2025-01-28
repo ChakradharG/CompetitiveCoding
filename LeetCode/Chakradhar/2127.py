@@ -1,48 +1,42 @@
 class Solution:
     def maximumInvitations(self, favorite: List[int]) -> int:
-        n = len(favorite)
-
-        indeg = [0 for _ in range(n)]
-        pairs = set()
-        for u in range(n):
-            v = favorite[u]
-            indeg[v] += 1
-            if u == favorite[v]:
-                pairs.add(u)
-                pairs.add(v)
-
-        q = deque([])
-        for u in range(n):
-            if indeg[u] == 0:
-                q.append((u, 1))
-
-        tail = {}
-        vis = set()
-        while q:
-            u, l = q.popleft()
+        def maxTail(u):
             vis.add(u)
+            tail = 0
+            for v in rev[u]:
+                if v not in vis:
+                    tail = max(tail, maxTail(v))
+            return tail + 1
+
+        n = len(favorite)
+        rev = [[] for _ in range(n)]    # reverse nodes
+        for u in range(n):
             v = favorite[u]
-            indeg[v] -= 1
-            if indeg[v] == 0:
-                q.append((v, l+1))
-            elif v in pairs:
-                tail[v] = max(tail.get(v, 0), l)
+            if u != favorite[v]:
+                rev[favorite[u]].append(u)
 
-        ans = 0
-        for u in pairs:
-            ans += (1 + tail.get(u, 0))
+        vis, ans = set(), 0
+        for u in range(n):
+            v = favorite[u]
+            if u == favorite[v]:
+                ans += maxTail(u)
 
+        # find length of cycles
         def dfs(u, l):
+            vis.add(u)
             lvl[u] = l
             v = favorite[u]
-            if v in lvl:
-                return (l - lvl[v] + 1)
+            if lvl.get(v, -1) != -1:
+                x = (l - lvl[v] + 1)
             else:
-                return dfs(v, l+1)
+                x = dfs(v, l+1)
+            lvl[u] = -1
+            return x
 
         lvl = {}
         for u in range(n):
-            if u not in vis and u not in pairs and u not in lvl:
+            if u not in vis:
                 ans = max(ans, dfs(u, 0))
+                print(u, ans)
 
         return ans
