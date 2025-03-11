@@ -1,7 +1,6 @@
 class Solution:
     def countOfSubstrings(self, word: str, k: int) -> int:
         n = len(word)
-        word += '#'
         d, need, cons = defaultdict(int), 5, 0
         vowels = set('aeiou')
 
@@ -26,7 +25,7 @@ class Solution:
                     if d[word[g]] == 0:
                         need += 1
                     g += 1
-                while d[word[g]] > 1:
+                while g < r and d[word[g]] > 1:
                     d[word[g]] -= 1
                     g += 1
             if need == 0 and cons == k:
