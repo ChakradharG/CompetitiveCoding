@@ -1,46 +1,28 @@
+class BIT:
+    def __init__(self, length):
+        self.tree = [0 for _ in range(length)] # tree[i] = cnt of (<=doubled[i])
+
+    def query(self, v):
+        res = 0
+        while v > 0:
+            res += self.tree[v]
+            v -= (v & -v)
+        return res
+
+    def update(self, v):
+        while v < len(self.tree):
+            self.tree[v] += 1
+            v += (v & -v)
+
+
 class Solution:
     def reversePairs(self, nums: List[int]) -> int:
-        def merge(a, b):
-            m, n = len(a), len(b)
-            i, j = 0, 0
-            cnt = 0
-            while (i < m) and (j < n):
-                if a[i] > 2 * b[j]:
-                    cnt += (m - i)
-                    j += 1
-                else:
-                    i += 1
+        doubled = sorted([2 * num for num in nums])
 
-            i, j = 0, 0
-            c = []
-            while (i < m) and (j < n):
-                if a[i] <= b[j]:
-                    c.append(a[i])
-                    i += 1
-                else:
-                    c.append(b[j])
-                    j += 1
+        bit = BIT(len(nums) + 1)
+        ans = 0
+        for num in reversed(nums):
+            ans += bit.query(bisect_left(doubled, num)) # number of elements seen so far that are than num
+            bit.update(bisect_left(doubled, 2 * num) + 1)   # add 2*num to seen
 
-            while i < m:
-                c.append(a[i])
-                i += 1
-            while j < n:
-                c.append(b[j])
-                j += 1
-
-            return c, cnt
-
-        def divide(arr):
-            if len(arr) < 2:
-                return arr, 0
-
-            beg, end = 0, len(arr)
-            m = (beg + end) // 2
-
-            lArr, lCnt = divide(arr[:m])
-            rArr, rCnt = divide(arr[m:])
-            arr, cnt = merge(lArr, rArr)
-
-            return arr, (lCnt + cnt + rCnt)
-
-        return divide(nums)[1]
+        return ans
