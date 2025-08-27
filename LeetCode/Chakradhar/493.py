@@ -17,12 +17,16 @@ class BIT:
 
 class Solution:
     def reversePairs(self, nums: List[int]) -> int:
-        doubled = sorted([2 * num for num in nums])
+        mapping = {
+            v: i for i, v in enumerate(
+                sorted(set(nums) | {2*num for num in nums})
+            )
+        }
 
-        bit = BIT(len(nums) + 1)
+        bit = BIT(len(mapping) + 1)
         ans = 0
-        for num in reversed(nums):
-            ans += bit.query(bisect_left(doubled, num)) # number of elements seen so far that are than num
-            bit.update(bisect_left(doubled, 2 * num) + 1)   # add 2*num to seen
+        for i, num in enumerate(nums):
+            ans += (i - bit.query(mapping[2*num] + 1)) # number of elements seen so far that are > than 2*num
+            bit.update(mapping[num] + 1)   # add num to seen
 
         return ans
