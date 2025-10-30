@@ -1,13 +1,8 @@
 class Solution:
     def minNumberOperations(self, target: List[int]) -> int:
-        cnt = 0
-        stack = []
-        for num in target:
-            if stack and stack[-1] > num:
-                # [1,3,4] only needs 4 steps
-                cnt += (stack[-1] - num)
-            while stack and stack[-1] >= num:
-                stack.pop()
-            stack.append(num)
+        ans = target[-1]
+        for i in range(1, len(target)):
+            if target[i-1] > target[i]:
+                ans += (target[i-1] - target[i])
 
-        return cnt + stack[-1]
+        return ans
