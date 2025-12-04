@@ -6,13 +6,24 @@ class Solution:
             key = (i, tight, ones)
             if key not in memo:
                 if tight:
-                    r = int(num[i]) + 1
+                    if num[i] == '0':
+                        memo[key] = dfs(i+1, True, ones)    # can only place 0
+                    elif num[i] == '1':
+                        memo[key] = (
+                            dfs(i+1, False, ones) + # place 0
+                            dfs(i+1, True, ones+1)  # place 1
+                        )
+                    else:
+                        memo[key] = (
+                            (int(num[i])-1) * dfs(i+1, False, ones) +   # place all digits < num[i] (except 1)
+                            dfs(i+1, False, ones+1) +                   # place 1
+                            dfs(i+1, True, ones)                        # place num[i]
+                        )
                 else:
-                    r = 10
-                res = 0
-                for d in range(r):
-                    res += dfs(i+1, (tight and d==int(num[i])), (ones + int(d==1)))
-                memo[key] = res
+                    memo[key] = (
+                        9 * dfs(i+1, False, ones) + # place all digits (except 1)
+                        dfs(i+1, False, ones+1)     # place 1
+                    )
             return memo[key]
 
         memo = {}
