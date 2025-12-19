@@ -1,19 +1,23 @@
 class Solution:
     def findAllPeople(self, n: int, meetings: List[List[int]], firstPerson: int) -> List[int]:
-        adj = {i: [] for i in range(n)}
-        for (x, y, t) in meetings:
-            adj[x].append((y, t))
-            adj[y].append((x, t))
-        adj[0].append((firstPerson, 0))
+        adj = [[] for _ in range(n)]
+        for u, v, w in meetings + [[0, firstPerson, 0]]:
+            adj[u].append((v, w))
+            adj[v].append((u, w))
 
-        q = deque([0])
-        vis = {0: 0}
-        while q:
-            x = q.popleft()
-            for (y, t) in adj[x]:
-                if t >= vis[x]: # x has secret at the time of meeting y
-                    if y not in vis or vis[y] > t:  # found a way to get secret to y (faster)
-                        vis[y] = t
-                        q.append(y)
+        dist = [math.inf for _ in range(n)]
+        dist[0] = 0
+        h = [(0, 0)]
 
-        return vis.keys()
+        while h:
+            t, u = heappop(h)
+            if t > dist[u]:
+                continue
+            for (v, w) in adj[u]:
+                if t > w:
+                    continue
+                if w < dist[v]:
+                    dist[v] = w
+                    heappush(h, (w, v))
+
+        return [i for i in range(n) if dist[i] != math.inf]
