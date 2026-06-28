@@ -1,37 +1,26 @@
-class BIT:
-    def __init__(self, length):
-        self.tree = [0 for _ in range(length)]
-
-    def query(self, i):
-        res = 0
-        while i > 0:
-            res += self.tree[i]
-            i -= (i & -i)
-        return res
-
-    def update(self, i):
-        while i < len(self.tree):
-            self.tree[i] += 1
-            i += (i & -i)
-
-class Solution:
+﻿class Solution:
     def countMajoritySubarrays(self, nums: List[int], target: int) -> int:
-        n = len(nums)
-        cur = 0
-        for i in range(n):
-            if nums[i] == target:
-                cur += 1
-            else:
-                cur -= 1
-            nums[i] = cur
-
-        indMap = {x: i for i, x in enumerate(sorted(set(nums + [0])))}
-        bit = BIT(len(indMap)+1)
-        bit.update(indMap[0]+1)
-
-        ans = 0
+        # if we transform nums such that trn[i] = +1 if (nums[i] == target) else -1
+        # then this problem essentially becomes finding subarrays of trn with sum > 0
+        # if we maintain a prefix sum on trn, then the number of subarrays ending at any
+        # given index i is the count of indices j < i such that pref[j] < pref[i]
+        # a neat trick to efficiently find count of indices j is to maintain the count
+        # of subarrays seen thus far with prefix value less than current one and update
+        # it during each iteration
+        pref = defaultdict(int) # count of prefixes
+        p = 0 # current prefix
+        pref[p] = 1
+        cnt, ans = 0, 0 # subarrays seen thus far with prefix value less than p, final answer
         for num in nums:
-            i = indMap[num]
-            ans += bit.query(i)
-            bit.update(i+1)
+            if num == target:
+                # since p is incrementing by 1, add the number of prefixes p seen thus far
+                cnt += pref[p]
+                p += 1
+            else:
+                # since p is decrementing by 1, remove the number of prefixes p-1 seen thus far
+                p -= 1
+                cnt -= pref[p]
+            ans += cnt # add number of valid subarrays ending at the current index to the final answer
+            pref[p] += 1 # record current prefix
+
         return ans
