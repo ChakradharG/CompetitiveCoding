@@ -6,21 +6,22 @@
                 a, b = b, a % b
             return a
 
-        @cache
-        def dfs(i, seq1, seq2):
-            areEq = 0
-            if seq1 != 0 and seq1 == seq2:
-                areEq = 1
-            if i == n:
-                return areEq
-            return (
-                + dfs(i+1, seq1, seq2)
-                + dfs(i+1, gcd(seq1, nums[i]), seq2)
-                + dfs(i+1, seq1, gcd(seq2, nums[i]))
-            ) % MOD
-
-        n = len(nums)
+        n, m = len(nums), max(nums) + 1
         MOD = 10**9 + 7
+        grid = [[1 if i==j else 0 for j in range(m)] for i in range(m)]
+        grid[0][0] = 0
 
-        return dfs(0, 0, 0)
+        for num in reversed(nums):
+            grid[0][0] = (grid[0][0] + grid[num][0] + grid[0][num]) % MOD
+            for y in reversed(range(1, m)):
+                grid[y][0] = (grid[y][0] + grid[gcd(y, num)][0] + grid[y][num]) % MOD
+                grid[0][y] = (grid[0][y] + grid[num][y] + grid[0][gcd(y, num)]) % MOD
+            for seq1 in reversed(range(1, m)):
+                for seq2 in reversed(range(1, m)):
+                    grid[seq1][seq2] = (
+                        grid[seq1][seq2]
+                        + grid[gcd(seq1, num)][seq2]
+                        + grid[seq1][gcd(seq2, num)]
+                    ) % MOD
 
+        return grid[0][0]
