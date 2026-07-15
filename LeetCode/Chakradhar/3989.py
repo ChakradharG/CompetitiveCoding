@@ -1,4 +1,4 @@
-class Solution:
+﻿class Solution:
     def maxConsistentColumns(self, grid: List[List[int]], limit: int) -> int:
         m, n = len(grid), len(grid[0])
         graph = [set(range(a+1, n)) for a in range(n)]
@@ -16,15 +16,12 @@ class Solution:
                     if indeg[b] == 0:
                         q.append(b)
 
-        d = 0
-        while q:
-            levelQd = set()
-            for _ in range(len(q)):
-                a = q.popleft()
-                for b in graph[a]:
-                    if b not in levelQd:
-                        q.append(b)
-                        levelQd.add(b)
-            d += 1
+        ans = 1
+        row = [1 for _ in range(n)]
+        for a in reversed(range(n-1)):
+            for b in graph[a]:
+                row[a] = max(row[a], row[b] + 1)
+            ans = max(ans, row[a])
 
-        return d
+        return ans
+
