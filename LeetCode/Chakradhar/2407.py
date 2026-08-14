@@ -34,13 +34,19 @@ class ST:
 
 class Solution:
     def lengthOfLIS(self, nums: List[int], k: int) -> int:
-        n = max(nums) + 1
+        unique = set()
+        for num in nums:
+            unique.add(num-k)
+            unique.add(num-1)
+            unique.add(num)
+        rev_map = {v: i for i, v in enumerate(sorted(unique))}
+        n = len(rev_map)
         st = ST(n)
 
         ans = 0
         for num in nums:
-            x = 1 + st.query(0, 0, n, num-k, num)
+            x = 1 + st.query(0, 0, n, rev_map[num-k], rev_map[num])
             ans = max(ans, x)
-            st.update(0, 0, n, num, x)
+            st.update(0, 0, n, rev_map[num], x)
 
         return ans
