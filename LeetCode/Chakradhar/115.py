@@ -1,16 +1,19 @@
-class Solution:
+﻿class Solution:
     def numDistinct(self, s: str, t: str) -> int:
-        r, c = len(t), len(s)
-        if r > c:
+        m, n = len(s), len(t)
+        if n > m:
             return 0
 
-        row1 = [1 for _ in range(c+1)]
-        for i in range(r-1, -1, -1):
-            row0 = [0 for _ in range(c+1)]
-            for j in range(c-1, i-1, -1):
-                row0[j] = row0[j+1]
-                if s[j] == t[i]:
+        row0 = [0] * (n + 1)
+        row1 = [0] * (n + 1)
+        row0[-1] = row1[-1] = 1
+
+        for i in reversed(range(m)):
+            for j in range(min(i+1, n)):
+                row0[j] = row1[j]
+                if s[i] == t[j]:
                     row0[j] += row1[j+1]
-            row1 = row0
+            row0, row1 = row1, row0
 
         return row1[0]
+
