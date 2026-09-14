@@ -1,37 +1,39 @@
-class Solution:
+﻿class Solution:
     def maximumWeight(self, intervals: List[List[int]]) -> List[int]:
-        def dfs(i, rem):
-            if rem == 0 or i >= n:
-                return 0, []
-
-            key = (i, rem)
-            if key not in memo:
-                sc1, ids1 = dfs(i+1, rem)  # skip
-                ids1 = ids1.copy()
-                ids1.sort()
-
-                l, r, w, x = intervals[i]
-                j = bisect_right(intervals, r, lo=i+1, key=lambda x: x[0])
-                sc2, ids2 = dfs(j, rem-1)
-                ids2 = ids2.copy()
-                sc2 += w
-                ids2.append(x)
-                ids2.sort()
-
-                if sc1 > sc2:
-                    memo[key] = sc1, ids1
-                elif sc1 < sc2:
-                    memo[key] = sc2, ids2
-                else:
-                    if ids1 < ids2:
-                        memo[key] = sc1, ids1
-                    else:
-                        memo[key] = sc2, ids2
-            return memo[key]
-
         n = len(intervals)
-        for i in range(n):
-            intervals[i].append(i)
-        intervals.sort()
-        memo = {}
-        return sorted(dfs(0, 4)[1])
+        intervals = sorted(([*x, oi] for oi, x in enumerate(intervals)))
+
+        line = []
+        for i, (l, r, *_) in enumerate(intervals):
+            line.append((l, 0, i))
+            line.append((r, 1, i))
+        line.sort()
+
+        stack = []
+        nxt = [None for _ in range(n)]
+        for _, t, i in line + [(inf, 0, n)]:
+            if t == 0:
+                while stack:
+                    nxt[stack.pop()] = i
+            else:
+                stack.append(i)
+
+        @cache
+        def dfs(i, rem):
+            if i == n or rem == 0:
+                return (0, ())
+            skp = dfs(i+1, rem)
+            x = dfs(nxt[i], rem-1)
+            tke = (
+                intervals[i][2] + x[0], 
+                tuple(sorted((intervals[i][3], *x[1])))
+            )
+            if tke[0] > skp[0]:
+                return tke
+            elif tke[0] == skp[0]:
+                return (tke[0], min(tke[1], skp[1]))
+            else:
+                return skp
+
+        return dfs(0, 4)[1]
+
