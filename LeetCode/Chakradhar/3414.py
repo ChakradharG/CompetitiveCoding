@@ -18,22 +18,22 @@
             else:
                 stack.append(i)
 
-        @cache
-        def dfs(i, rem):
-            if i == n or rem == 0:
-                return (0, ())
-            skp = dfs(i+1, rem)
-            x = dfs(nxt[i], rem-1)
-            tke = (
-                intervals[i][2] + x[0], 
-                tuple(sorted((intervals[i][3], *x[1])))
-            )
-            if tke[0] > skp[0]:
-                return tke
-            elif tke[0] == skp[0]:
-                return (tke[0], min(tke[1], skp[1]))
-            else:
-                return skp
+        dp = [[(0, ()) for j in range(5)] for i in range(n+1)]
 
-        return dfs(0, 4)[1]
+        for i in reversed(range(n)):
+            for rem in range(1, 5):
+                skp = dp[i+1][rem]
+                x = dp[nxt[i]][rem-1]
+                tke = (
+                    intervals[i][2] + x[0], 
+                    tuple(sorted((intervals[i][3], *x[1])))
+                )
+                if tke[0] > skp[0]:
+                    dp[i][rem] = tke
+                elif tke[0] == skp[0]:
+                    dp[i][rem] = (tke[0], min(tke[1], skp[1]))
+                else:
+                    dp[i][rem] = skp
+
+        return dp[0][4][1]
 
