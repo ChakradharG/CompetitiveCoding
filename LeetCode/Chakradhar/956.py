@@ -1,15 +1,18 @@
 ﻿class Solution:
     def tallestBillboard(self, rods: list[int]) -> int:
-        @cache
-        def dfs(i, diff):
-            if i == n:
-                return -inf if diff else 0
-            return max(
-                dfs(i+1, diff),
-                rods[i] + dfs(i+1, diff+rods[i]),
-                dfs(i+1, diff-rods[i]),
-            )
-
         n = len(rods)
-        return dfs(0, 0)
+        s = sum(rods)
+        m = 2 * s + 1
+        row0 = [0] * m
+        row1 = [-inf] * s + [0] + [-inf] * s
+
+        for i in reversed(range(n)):
+            for diff in range(rods[i], m-rods[i]):
+                row0[diff] = max(
+                    row1[diff],
+                    row1[diff+rods[i]] + rods[i],
+                    row1[diff-rods[i]]
+                )
+            row0, row1 = row1, row0
+        return row1[s]
 
